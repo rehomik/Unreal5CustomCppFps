@@ -9,6 +9,7 @@
 class AEngineDic1CppCharacter;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponDrop, AEngineDic1CppCharacter*, DropCharacter);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeaponSwap, UTP_WeaponComponent*, PreviousWeapon, AEngineDic1CppCharacter*, SwapCharacter);
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ENGINEDIC1CPP_API UTP_WeaponComponent : public USkeletalMeshComponent
@@ -46,6 +47,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
 	FOnWeaponDrop OnWeaponDrop;
 
+	UPROPERTY(BlueprintAssignable, Category = "Interaction")
+	FOnWeaponSwap OnWeaponSwap;
+
 	/** Sets default values for this component's properties */
 	UTP_WeaponComponent();
 
@@ -61,6 +65,8 @@ public:
 	void Fire();
 
 	void Drop();
+
+	void SwapWeapon(UTP_WeaponComponent* previousWeapon);
 
 protected:
 	/** Ends gameplay for this component. */

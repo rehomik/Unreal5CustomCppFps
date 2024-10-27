@@ -71,13 +71,34 @@ void UTP_WeaponComponent::Drop()
 	OnWeaponDrop.Broadcast(Character);
 }
 
+void UTP_WeaponComponent::SwapWeapon(UTP_WeaponComponent* previousWeapon)
+{
+	if (Character == nullptr)
+	{
+		return;
+	}
+
+	OnWeaponSwap.Broadcast(previousWeapon, Character);
+}
+
 bool UTP_WeaponComponent::AttachWeapon(AEngineDic1CppCharacter* TargetCharacter)
 {
 	Character = TargetCharacter;
 
+	UTP_WeaponComponent* weapon = nullptr;
+	Character->GetInstanceComponents().FindItemByClass<UTP_WeaponComponent>(&weapon);
+
 	// Check that the character is valid, and has no weapon component yet
-	if (Character == nullptr || Character->GetInstanceComponents().FindItemByClass<UTP_WeaponComponent>())
+	if (Character == nullptr)
 	{
+		return false;
+	}
+
+	// 이미 장착 중인 무기가 있는 경우 스왑 처리.
+	if (weapon != nullptr)
+	{
+		SwapWeapon(weapon);
+
 		return false;
 	}
 
