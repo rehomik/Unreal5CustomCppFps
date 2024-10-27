@@ -66,6 +66,11 @@ void UTP_WeaponComponent::Fire()
 	}
 }
 
+void UTP_WeaponComponent::Drop()
+{
+	OnWeaponDrop.Broadcast(Character);
+}
+
 bool UTP_WeaponComponent::AttachWeapon(AEngineDic1CppCharacter* TargetCharacter)
 {
 	Character = TargetCharacter;
@@ -96,6 +101,38 @@ bool UTP_WeaponComponent::AttachWeapon(AEngineDic1CppCharacter* TargetCharacter)
 		{
 			// Fire
 			EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &UTP_WeaponComponent::Fire);
+
+			// Weapon Deop
+			EnhancedInputComponent->BindAction(WeaponDropAction, ETriggerEvent::Triggered, this, &UTP_WeaponComponent::Drop);
+		}
+	}
+
+	return true;
+}
+
+bool UTP_WeaponComponent::DetachWeapon()
+{
+	if (Character == nullptr || !Character->GetInstanceComponents().FindItemByClass<UTP_WeaponComponent>())
+	{
+		return false;
+	}
+
+	// 컴포넌트 액터에서 분리.
+	DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+	Character->RemoveInstanceComponent(this);
+
+	// 무기 관련 등록된 키 바인딩 제거.
+	if (APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(FireMappingContext, 1);
+			Subsystem->RemoveMappingContext(FireMappingContext);
+		}
+
+		if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerController->InputComponent))
+		{
+			EnhancedInputComponent->ClearActionBindings();
 		}
 	}
 

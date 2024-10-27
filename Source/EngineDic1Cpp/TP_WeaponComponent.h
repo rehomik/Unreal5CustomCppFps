@@ -8,6 +8,8 @@
 
 class AEngineDic1CppCharacter;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponDrop, AEngineDic1CppCharacter*, DropCharacter);
+
 UCLASS(Blueprintable, BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ENGINEDIC1CPP_API UTP_WeaponComponent : public USkeletalMeshComponent
 {
@@ -38,6 +40,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* FireAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* WeaponDropAction;
+
+	UPROPERTY(BlueprintAssignable, Category = "Interaction")
+	FOnWeaponDrop OnWeaponDrop;
+
 	/** Sets default values for this component's properties */
 	UTP_WeaponComponent();
 
@@ -45,9 +53,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Weapon")
 	bool AttachWeapon(AEngineDic1CppCharacter* TargetCharacter);
 
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	bool DetachWeapon();
+
 	/** Make the weapon Fire a Projectile */
 	UFUNCTION(BlueprintCallable, Category="Weapon")
 	void Fire();
+
+	void Drop();
 
 protected:
 	/** Ends gameplay for this component. */
