@@ -23,7 +23,7 @@ Version: 5.4.4
 적당한 branch를 clone 합니다.
 
 ```
-git clone --branch weapon-drop-with-physics https://github.com/rehomik/Unreal5CustomCppFps.git ./
+git clone --branch weapon-swap https://github.com/rehomik/Unreal5CustomCppFps.git ./
 ```
 
 🙌 _master 브런치는 정리되어있지 않습니다._<br>
