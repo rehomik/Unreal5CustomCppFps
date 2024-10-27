@@ -88,6 +88,10 @@ bool UTP_WeaponComponent::AttachWeapon(AEngineDic1CppCharacter* TargetCharacter)
 	// add the weapon as an instance component to the character
 	Character->AddInstanceComponent(this);
 
+	// 물리 관련 설정 해제.
+	SetSimulatePhysics(false);
+	SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 	// Set up action bindings
 	if (APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
 	{
