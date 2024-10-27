@@ -18,7 +18,7 @@ class ENGINEDIC1CPP_API UTP_WeaponComponent : public USkeletalMeshComponent
 
 public:
 	/** Projectile class to spawn */
-	UPROPERTY(EditDefaultsOnly, Category=Projectile)
+	UPROPERTY(EditAnyWhere, Category=Projectile)
 	TSubclassOf<class AEngineDic1CppProjectile> ProjectileClass;
 
 	/** Sound to play each time we fire */
