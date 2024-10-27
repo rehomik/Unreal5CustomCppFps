@@ -90,7 +90,7 @@ bool UTP_WeaponComponent::AttachWeapon(AEngineDic1CppCharacter* TargetCharacter)
 
 	// 물리 관련 설정 해제.
 	SetSimulatePhysics(false);
-	SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	SetCollisionProfileName(TEXT("NoCollision"));
 
 	// Set up action bindings
 	if (APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
@@ -124,6 +124,10 @@ bool UTP_WeaponComponent::DetachWeapon()
 	// 컴포넌트 액터에서 분리.
 	DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 	Character->RemoveInstanceComponent(this);
+
+	// 물리 관련 설정 작동.
+	SetSimulatePhysics(true);
+	SetCollisionProfileName(TEXT("PhysicsActor"));
 
 	// 무기 관련 등록된 키 바인딩 제거.
 	if (APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
