@@ -8,9 +8,13 @@ Version: 5.4.4
 
 ## 추가 내용
 - [x] 무기 떨어뜨리기(+물리 적용)
-- [Branch: Weapon-Drop](https://github.com/rehomik/Unreal5CustomCppFps/tree/weapon-drop): 무기 해제되나 무기가 공중에 떠있음
-- [Branch: Weapon-Drop-with-physics](https://github.com/rehomik/Unreal5CustomCppFps/tree/weapon-drop-with-physics): 해제된 무기는 땅으로 떨어짐.
-- [Branch: weapon-swap](https://github.com/rehomik/Unreal5CustomCppFps/tree/weapon-swap): 두번째 무기 획득시 기존 무기 떨어지고, 새로운 무기로 변경.
+  
+  [Branch: Weapon-Drop](https://github.com/rehomik/Unreal5CustomCppFps/tree/weapon-drop): 무기 해제되나 무기가 공중에 떠있음
+
+  [Branch: Weapon-Drop-with-physics](https://github.com/rehomik/Unreal5CustomCppFps/tree/weapon-drop-with-physics): 해제된 무기는 땅으로 떨어짐.
+- [x] 무기 변경
+  
+    [Branch: weapon-Swap](https://github.com/rehomik/Unreal5CustomCppFps/tree/weapon-swap): 두번째 무기 획득시 기존 무기 떨어지고, 새로운 무기로 변경.
 
 ## Get Started
 
