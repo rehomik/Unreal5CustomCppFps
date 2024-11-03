@@ -7,27 +7,20 @@
 Version: 5.4.4
 
 ## 추가 내용
-- [x] 무기 떨어뜨리기(+물리 적용)
-  
-  [Branch: Weapon-Drop](https://github.com/rehomik/Unreal5CustomCppFps/tree/weapon-drop): 무기 해제되나 무기가 공중에 떠있음
-
-  [Branch: Weapon-Drop-with-physics](https://github.com/rehomik/Unreal5CustomCppFps/tree/weapon-drop-with-physics): 해제된 무기는 땅으로 떨어짐.
+- [x] 무기 떨어뜨리기
+    - 무기 떨어뜨리기 - 단순
+    - 무리 떨어뜨리기 - 물리 적용
+    
 - [x] 무기 변경
-  
-    [Branch: weapon-Swap](https://github.com/rehomik/Unreal5CustomCppFps/tree/weapon-swap): 두번째 무기 획득시 기존 무기 떨어지고, 새로운 무기로 변경.
+- [x] 탄약 추가
 
 ## Get Started
 
-### 1. Clone
+### 1. Release Download
 
-적당한 branch를 clone 합니다.
-
-```
-git clone --branch weapon-drop-with-physics https://github.com/rehomik/Unreal5CustomCppFps.git ./
-```
+화면 우측에서 적당한 release를 다운로드하여 압축 풀고 실행합니다.
 
 🙌 _master 브런치는 정리되어있지 않습니다._<br>
-🙌 GitHub Desktop을 이용할 수 있습니다.
 
 ### 2. 엔진 실행
 
@@ -52,3 +45,4 @@ Visual Studio 열기를 선택하여 정상적으로 열리는지 확인합니�
 ## 사용 입력
 
 F = 무기 드랍.
+R = 재장전.
