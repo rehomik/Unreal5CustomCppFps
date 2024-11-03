@@ -10,6 +10,7 @@ class AEngineDic1CppCharacter;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponDrop, AEngineDic1CppCharacter*, DropCharacter);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeaponSwap, UTP_WeaponComponent*, PreviousWeapon, AEngineDic1CppCharacter*, SwapCharacter);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponReload, int, MaxBullet);
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ENGINEDIC1CPP_API UTP_WeaponComponent : public USkeletalMeshComponent
@@ -44,11 +45,25 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* WeaponDropAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* ReloadAction;
+
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
 	FOnWeaponDrop OnWeaponDrop;
 
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
 	FOnWeaponSwap OnWeaponSwap;
+
+	UPROPERTY(BlueprintAssignable, Category = "Interaction")
+	FOnWeaponReload OnWeaponReload;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
+	int bulletCount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	int maxBulletCount;
+
+public :
 
 	/** Sets default values for this component's properties */
 	UTP_WeaponComponent();
@@ -60,6 +75,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	bool DetachWeapon();
 
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void setCurrentBulletCount(int count);
+
 	/** Make the weapon Fire a Projectile */
 	UFUNCTION(BlueprintCallable, Category="Weapon")
 	void Fire();
@@ -68,7 +86,13 @@ public:
 
 	void SwapWeapon(UTP_WeaponComponent* previousWeapon);
 
+	void Reload();
+
 protected:
+	/** Called when the game starts */
+	UFUNCTION()
+	virtual void BeginPlay() override;
+
 	/** Ends gameplay for this component. */
 	UFUNCTION()
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;

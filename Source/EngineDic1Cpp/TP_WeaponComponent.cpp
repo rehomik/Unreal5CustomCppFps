@@ -20,6 +20,18 @@ UTP_WeaponComponent::UTP_WeaponComponent()
 	MuzzleOffset = FVector(100.0f, 0.0f, 10.0f);
 }
 
+void UTP_WeaponComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	setCurrentBulletCount(maxBulletCount);
+}
+
+void UTP_WeaponComponent::setCurrentBulletCount(int count)
+{
+	bulletCount = count;
+}
+
 
 void UTP_WeaponComponent::Fire()
 {
@@ -27,6 +39,15 @@ void UTP_WeaponComponent::Fire()
 	{
 		return;
 	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("bulletCount: " + FString::FromInt(bulletCount)));
+
+	if (bulletCount <= 0)
+	{
+		return;
+	}
+
+	--bulletCount;
 
 	// Try and fire a projectile
 	if (ProjectileClass != nullptr)
@@ -81,6 +102,16 @@ void UTP_WeaponComponent::SwapWeapon(UTP_WeaponComponent* previousWeapon)
 	OnWeaponSwap.Broadcast(previousWeapon, Character);
 }
 
+void UTP_WeaponComponent::Reload()
+{
+	if (Character == nullptr)
+	{
+		return;
+	}
+
+	OnWeaponReload.Broadcast(maxBulletCount);
+}
+
 bool UTP_WeaponComponent::AttachWeapon(AEngineDic1CppCharacter* TargetCharacter)
 {
 	Character = TargetCharacter;
@@ -94,7 +125,7 @@ bool UTP_WeaponComponent::AttachWeapon(AEngineDic1CppCharacter* TargetCharacter)
 		return false;
 	}
 
-	// ÀÌ¹Ì ÀåÂø ÁßÀÎ ¹«±â°¡ ÀÖ´Â °æ¿ì ½º¿Ò Ã³¸®.
+	// ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â°¡ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½.
 	if (weapon != nullptr)
 	{
 		SwapWeapon(weapon);
@@ -109,7 +140,7 @@ bool UTP_WeaponComponent::AttachWeapon(AEngineDic1CppCharacter* TargetCharacter)
 	// add the weapon as an instance component to the character
 	Character->AddInstanceComponent(this);
 
-	// ¹°¸® °ü·Ã ¼³Á¤ ÇØÁ¦.
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 	SetSimulatePhysics(false);
 	SetCollisionProfileName(TEXT("NoCollision"));
 
@@ -129,6 +160,9 @@ bool UTP_WeaponComponent::AttachWeapon(AEngineDic1CppCharacter* TargetCharacter)
 
 			// Weapon Deop
 			EnhancedInputComponent->BindAction(WeaponDropAction, ETriggerEvent::Triggered, this, &UTP_WeaponComponent::Drop);
+
+			// Reload
+			EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &UTP_WeaponComponent::Reload);
 		}
 	}
 
@@ -142,15 +176,15 @@ bool UTP_WeaponComponent::DetachWeapon()
 		return false;
 	}
 
-	// ÄÄÆ÷³ÍÆ® ¾×ÅÍ¿¡¼­ ºÐ¸®.
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ ï¿½Ð¸ï¿½.
 	DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 	Character->RemoveInstanceComponent(this);
 
-	// ¹°¸® °ü·Ã ¼³Á¤ ÀÛµ¿.
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ûµï¿½.
 	SetSimulatePhysics(true);
 	SetCollisionProfileName(TEXT("PhysicsActor"));
 
-	// ¹«±â °ü·Ã µî·ÏµÈ Å° ¹ÙÀÎµù Á¦°Å.
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ïµï¿½ Å° ï¿½ï¿½ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½.
 	if (APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
