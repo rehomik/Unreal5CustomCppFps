@@ -11,6 +11,7 @@ class AEngineDic1CppCharacter;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponDrop, AEngineDic1CppCharacter*, DropCharacter);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeaponSwap, UTP_WeaponComponent*, PreviousWeapon, AEngineDic1CppCharacter*, SwapCharacter);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponReload, int, MaxBullet);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeaponFire, int, currentBullet, int, maxBullet);
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ENGINEDIC1CPP_API UTP_WeaponComponent : public USkeletalMeshComponent
@@ -56,6 +57,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
 	FOnWeaponReload OnWeaponReload;
+
+	UPROPERTY(BlueprintAssignable, Category = "Interaction")
+	FOnWeaponFire OnWeaponFire;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
 	int bulletCount;

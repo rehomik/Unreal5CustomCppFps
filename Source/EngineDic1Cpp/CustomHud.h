@@ -13,11 +13,13 @@ UCLASS(Blueprintable)
 class ENGINEDIC1CPP_API ACustomHud : public AHUD
 {
 	GENERATED_BODY()
-
 private :
 	virtual void BeginPlay() override;
 
 private :
 	UPROPERTY(EditAnywhere, Category = "Widgets")
 	TSubclassOf<class UUserWidget> WidgetClass;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UUserWidget* mainWidget;
 };

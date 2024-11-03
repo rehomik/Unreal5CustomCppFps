@@ -12,12 +12,12 @@ void ACustomHud::BeginPlay()
 	if (WidgetClass)
 	{
 		// Create the widget and store it
-		auto CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), WidgetClass);
+		mainWidget = CreateWidget<UUserWidget>(GetWorld(), WidgetClass);
 
 		// Add it to the viewport
-		if (CurrentWidget)
+		if (mainWidget)
 		{
-			CurrentWidget->AddToViewport();
+			mainWidget->AddToViewport();
 		}
 	}
 }

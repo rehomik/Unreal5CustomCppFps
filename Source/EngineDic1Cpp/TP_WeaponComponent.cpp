@@ -85,6 +85,8 @@ void UTP_WeaponComponent::Fire()
 			AnimInstance->Montage_Play(FireAnimation, 1.f);
 		}
 	}
+
+	OnWeaponFire.Broadcast(bulletCount, maxBulletCount);
 }
 
 void UTP_WeaponComponent::Drop()

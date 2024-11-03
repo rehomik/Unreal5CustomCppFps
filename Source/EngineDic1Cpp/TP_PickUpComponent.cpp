@@ -24,9 +24,5 @@ void UTP_PickUpComponent::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedCo
 	{
 		// Notify that the actor is being picked up
 		OnPickUp.Broadcast(Character);
-
-		// 계속 픽업 할 수 있도록 주석처리.
-		// Unregister from the Overlap Event so it is no longer triggered
-		//OnComponentBeginOverlap.RemoveAll(this);
 	}
 }
