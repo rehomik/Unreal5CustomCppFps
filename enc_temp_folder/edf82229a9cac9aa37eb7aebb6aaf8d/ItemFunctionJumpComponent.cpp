@@ -39,6 +39,7 @@ void UItemFunctionJumpComponent::BeginPlay()
 	}
 }
 
+
 // Called every frame
 void UItemFunctionJumpComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {

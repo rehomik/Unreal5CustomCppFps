@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS(Blueprintable)
+UCLASS(Blueprintable, meta = (BlueprintSpawnableComponent))
 class ENGINEDIC1CPP_API UItemBodyComponent : public UStaticMeshComponent
 {
 	GENERATED_BODY()
