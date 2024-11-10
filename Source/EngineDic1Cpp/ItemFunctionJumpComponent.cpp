@@ -6,6 +6,7 @@
 #include "InputActionValue.h"
 #include "EnhancedInputComponent.h"
 #include "EngineDic1CppCharacter.h"
+#include "TimerManager.h"
 
 // Sets default values for this component's properties
 UItemFunctionJumpComponent::UItemFunctionJumpComponent()
@@ -37,6 +38,28 @@ void UItemFunctionJumpComponent::BeginPlay()
 			UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 		}
 	}
+
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UItemFunctionJumpComponent::DestroyItemFunction, 2.0f, true, 1.0f);
+}
+
+void UItemFunctionJumpComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	// Set up action bindings
+	if (APlayerController* PlayerController = Cast<APlayerController>(TargetCharacter->GetController()))
+	{
+		if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerController->InputComponent))
+		{
+			EnhancedInputComponent->ClearActionBindings();
+		}
+		else
+		{
+			UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+		}
+	}
+
+	GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 }
 
 // Called every frame
@@ -47,3 +70,7 @@ void UItemFunctionJumpComponent::TickComponent(float DeltaTime, ELevelTick TickT
 	// ...
 }
 
+void UItemFunctionJumpComponent::DestroyItemFunction()
+{
+	DestroyComponent();
+}

@@ -20,6 +20,11 @@ class ENGINEDIC1CPP_API UItemFunctionJumpComponent : public UActorComponent
 	UPROPERTY(BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true", ExposeOnSpawn = "true"))
 	AEngineDic1CppCharacter* TargetCharacter;
 
+	FTimerHandle TimerHandle;
+
+private :
+	void DestroyItemFunction();
+
 public:	
 	// Sets default values for this component's properties
 	UItemFunctionJumpComponent();
@@ -27,6 +32,7 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 public:	
 	// Called every frame
