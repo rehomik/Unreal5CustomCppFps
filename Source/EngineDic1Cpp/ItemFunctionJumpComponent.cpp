@@ -7,6 +7,7 @@
 #include "EnhancedInputComponent.h"
 #include "EngineDic1CppCharacter.h"
 #include "TimerManager.h"
+#include <EnhancedInputSubsystems.h>
 
 // Sets default values for this component's properties
 UItemFunctionJumpComponent::UItemFunctionJumpComponent()
@@ -27,11 +28,20 @@ void UItemFunctionJumpComponent::BeginPlay()
 	// Set up action bindings
 	if (APlayerController* PlayerController = Cast<APlayerController>(TargetCharacter->GetController()))
 	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			// Set the priority of the mapping to 1, so that it overrides the Jump action with the Fire action when using touch input
+			Subsystem->AddMappingContext(AdditionalMovement, 1);
+		}
+
 		if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerController->InputComponent))
 		{
 			// Jumping
-			EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, TargetCharacter, &ACharacter::Jump);
-			EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, TargetCharacter, &ACharacter::StopJumping);
+			FEnhancedInputActionEventBinding& jumpAction = EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, TargetCharacter, &ACharacter::Jump);
+			this->JumpActionHandle = jumpAction.GetHandle();
+
+			FEnhancedInputActionEventBinding& endJumpAction = EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, TargetCharacter, &ACharacter::StopJumping);
+			this->EndJumpActionHandle = endJumpAction.GetHandle();
 		}
 		else
 		{
@@ -39,7 +49,7 @@ void UItemFunctionJumpComponent::BeginPlay()
 		}
 	}
 
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UItemFunctionJumpComponent::DestroyItemFunction, 2.0f, true, 1.0f);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UItemFunctionJumpComponent::DestroyItemFunction, 5.0f, false);
 }
 
 void UItemFunctionJumpComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -49,9 +59,16 @@ void UItemFunctionJumpComponent::EndPlay(const EEndPlayReason::Type EndPlayReaso
 	// Set up action bindings
 	if (APlayerController* PlayerController = Cast<APlayerController>(TargetCharacter->GetController()))
 	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			// Set the priority of the mapping to 1, so that it overrides the Jump action with the Fire action when using touch input
+			Subsystem->RemoveMappingContext(AdditionalMovement);
+		}
+
 		if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerController->InputComponent))
 		{
-			EnhancedInputComponent->ClearActionBindings();
+ 			EnhancedInputComponent->RemoveActionBindingForHandle(this->JumpActionHandle);
+			EnhancedInputComponent->RemoveActionBindingForHandle(this->EndJumpActionHandle);
 		}
 		else
 		{

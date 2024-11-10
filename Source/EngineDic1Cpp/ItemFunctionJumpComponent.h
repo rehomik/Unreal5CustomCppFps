@@ -8,6 +8,7 @@
 
 class UInputAction;
 class AEngineDic1CppCharacter;
+class UInputMappingContext;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ENGINEDIC1CPP_API UItemFunctionJumpComponent : public UActorComponent
@@ -20,7 +21,13 @@ class ENGINEDIC1CPP_API UItemFunctionJumpComponent : public UActorComponent
 	UPROPERTY(BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true", ExposeOnSpawn = "true"))
 	AEngineDic1CppCharacter* TargetCharacter;
 
+	UPROPERTY(BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true", ExposeOnSpawn = "true"))
+	UInputMappingContext* AdditionalMovement;
+
 	FTimerHandle TimerHandle;
+
+	uint32 JumpActionHandle;
+	uint32 EndJumpActionHandle;
 
 private :
 	void DestroyItemFunction();
