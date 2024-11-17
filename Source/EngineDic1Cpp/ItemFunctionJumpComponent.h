@@ -10,7 +10,9 @@ class UInputAction;
 class AEngineDic1CppCharacter;
 class UInputMappingContext;
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPickJumpBuff);
+
+UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ENGINEDIC1CPP_API UItemFunctionJumpComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -23,6 +25,12 @@ class ENGINEDIC1CPP_API UItemFunctionJumpComponent : public UActorComponent
 
 	UPROPERTY(BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true", ExposeOnSpawn = "true"))
 	UInputMappingContext* AdditionalMovement;
+
+	UPROPERTY(BlueprintAssignable, Category = "Interaction")
+	FOnPickJumpBuff OnPickJumpBuff;
+
+	UPROPERTY(BlueprintAssignable, Category = "Interaction")
+	FOnPickJumpBuff OffPickJumpBuff;
 
 	FTimerHandle TimerHandle;
 

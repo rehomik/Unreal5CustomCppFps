@@ -50,6 +50,8 @@ void UItemFunctionJumpComponent::BeginPlay()
 	}
 
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UItemFunctionJumpComponent::DestroyItemFunction, 5.0f, false);
+
+	OnPickJumpBuff.Broadcast();
 }
 
 void UItemFunctionJumpComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -77,6 +79,8 @@ void UItemFunctionJumpComponent::EndPlay(const EEndPlayReason::Type EndPlayReaso
 	}
 
 	GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+
+	OffPickJumpBuff.Broadcast();
 }
 
 // Called every frame
